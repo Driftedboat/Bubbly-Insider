@@ -2,6 +2,8 @@
 
 A crypto discovery copilot that denoises information by combining macro/news, top KOL discussion on X, and basic market context into 10 "insider cards." Each card is labeled Bull/Bear with a confidence percentage and expands into evidence-backed analysis.
 
+📄 **[Full PRD Documentation](docs/PRD.md)**
+
 ![Bubbly Insider Screenshot](screenshot.png)
 
 ## Features

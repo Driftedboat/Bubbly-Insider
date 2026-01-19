@@ -1,10 +1,14 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { MarketPulse } from '@/types'
 
 interface MarketStripProps {
   marketPulse: MarketPulse | null
 }
+
+// Auto-refresh interval (1 hour = 3600000ms)
+const PRICE_REFRESH_INTERVAL = 60 * 60 * 1000
 
 // Mini sparkline component
 function Sparkline({ data }: { data: number[] }) {
@@ -40,7 +44,47 @@ function Sparkline({ data }: { data: number[] }) {
   )
 }
 
-export default function MarketStrip({ marketPulse }: MarketStripProps) {
+export default function MarketStrip({ marketPulse: initialMarketPulse }: MarketStripProps) {
+  const [marketPulse, setMarketPulse] = useState<MarketPulse | null>(initialMarketPulse)
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
+  
+  // Update when prop changes
+  useEffect(() => {
+    if (initialMarketPulse) {
+      setMarketPulse(initialMarketPulse)
+      setLastRefresh(new Date())
+    }
+  }, [initialMarketPulse])
+  
+  // Auto-refresh prices every hour
+  useEffect(() => {
+    const fetchPrices = async () => {
+      try {
+        const response = await fetch('/api/market_pulse')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.btcPrice > 0) {
+            setMarketPulse(data)
+            setLastRefresh(new Date())
+            console.log('Prices refreshed:', new Date().toLocaleTimeString())
+          }
+        }
+      } catch (error) {
+        console.error('Failed to refresh prices:', error)
+      }
+    }
+    
+    // Initial fetch if no data
+    if (!initialMarketPulse) {
+      fetchPrices()
+    }
+    
+    // Set up hourly refresh
+    const interval = setInterval(fetchPrices, PRICE_REFRESH_INTERVAL)
+    
+    return () => clearInterval(interval)
+  }, [initialMarketPulse])
+  
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -119,9 +163,13 @@ export default function MarketStrip({ marketPulse }: MarketStripProps) {
           </div>
         )}
         
-        {/* Timestamp */}
-        <div className="text-terminal-green/40 font-terminal text-xs">
-          as of {formatTime(marketPulse.timestamp)}
+        {/* Timestamp + Refresh indicator */}
+        <div className="text-terminal-green/40 font-terminal text-xs flex items-center gap-2">
+          <span>as of {formatTime(marketPulse.timestamp)}</span>
+          <span className="hidden md:inline text-terminal-green/20">•</span>
+          <span className="hidden md:inline text-[10px]">
+            refreshes hourly
+          </span>
         </div>
       </div>
     </div>

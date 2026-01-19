@@ -82,3 +82,36 @@ export interface SourceItem {
   publishedAt: string;
   fetchedAt: string;
 }
+
+// Extended Card with scoring metadata
+export interface ScoredCard extends Card {
+  influenceScore: number;
+  sentimentScore: number;
+  finalScore: number;
+  isPolicy: boolean;
+  policyType?: string;
+  isFresh: boolean;
+}
+
+// Deck statistics
+export interface DeckStats {
+  totalCards: number;
+  bullCount: number;
+  bearCount: number;
+  bullPercentage: number;
+  bearPercentage: number;
+  policyCount: number;
+  newsCount: number;
+  kolCount: number;
+  priceCount: number;
+  freshCount: number;
+  isBalanced: boolean;
+}
+
+// Scraper engagement metrics
+export interface EngagementMetrics {
+  likes?: number;
+  retweets?: number;
+  replies?: number;
+  views?: number;
+}

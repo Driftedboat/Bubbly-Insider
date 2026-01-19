@@ -1,0 +1,227 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+:root {
+  --font-press-start: 'Press Start 2P', monospace;
+  --font-vt323: 'VT323', monospace;
+  --bull-green: #00ff41;
+  --bear-red: #ff3333;
+  --bg-dark: #0a0a0a;
+  --border-glow: rgba(0, 255, 65, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  color: var(--bull-green);
+  font-family: var(--font-vt323);
+  min-height: 100vh;
+}
+
+/* CRT Scanline Effect */
+.crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  z-index: 9999;
+  opacity: 0.3;
+}
+
+/* Pixel Border Style */
+.pixel-border {
+  border: 3px solid var(--bull-green);
+  box-shadow: 
+    inset -3px -3px 0 0 #005500,
+    inset 3px 3px 0 0 #00ff41,
+    0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+.pixel-border-red {
+  border: 3px solid var(--bear-red);
+  box-shadow: 
+    inset -3px -3px 0 0 #550000,
+    inset 3px 3px 0 0 #ff3333,
+    0 0 20px rgba(255, 51, 51, 0.3);
+}
+
+/* Card Styles */
+.card-bull {
+  background: linear-gradient(135deg, #001a00 0%, #003300 50%, #002200 100%);
+  border: 2px solid var(--bull-green);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 65, 0.3),
+    inset 0 0 30px rgba(0, 255, 65, 0.1);
+}
+
+.card-bear {
+  background: linear-gradient(135deg, #1a0000 0%, #330000 50%, #220000 100%);
+  border: 2px solid var(--bear-red);
+  box-shadow: 
+    0 0 15px rgba(255, 51, 51, 0.3),
+    inset 0 0 30px rgba(255, 51, 51, 0.1);
+}
+
+/* Button Styles */
+.btn-primary {
+  @apply px-6 py-3 font-pixel text-sm uppercase tracking-wider;
+  background: linear-gradient(180deg, #004400 0%, #002200 100%);
+  border: 2px solid var(--bull-green);
+  color: var(--bull-green);
+  text-shadow: 0 0 10px var(--bull-green);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 65, 0.3),
+    inset 0 1px 0 rgba(0, 255, 65, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #006600 0%, #003300 100%);
+  box-shadow: 
+    0 0 25px rgba(0, 255, 65, 0.5),
+    inset 0 1px 0 rgba(0, 255, 65, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 0 10px rgba(0, 255, 65, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Market Strip Styles */
+.market-strip {
+  background: linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #003300;
+  border: 1px solid var(--bull-green);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #004400;
+}
+
+/* Card Flip Animation */
+.card-container {
+  perspective: 1000px;
+}
+
+.card-inner {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+/* Glow Text */
+.glow-text {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+}
+
+.glow-text-subtle {
+  text-shadow: 0 0 5px currentColor;
+}
+
+/* Badge Styles */
+.badge {
+  @apply px-2 py-0.5 text-xs font-pixel uppercase;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid currentColor;
+}
+
+/* Panel Styles */
+.panel {
+  background: linear-gradient(180deg, #0a0a0a 0%, #0f0f0f 100%);
+  border-left: 2px solid var(--bull-green);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Horizontal scroll for mobile */
+.deck-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+}
+
+.deck-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.deck-scroll > * {
+  scroll-snap-align: center;
+}
+
+/* Confidence meter */
+.confidence-meter {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.confidence-fill {
+  transition: width 0.5s ease-out;
+}
+
+/* Source badge colors */
+.source-bloomberg {
+  color: #ff6600;
+  border-color: #ff6600;
+}
+
+.source-coindesk {
+  color: #00ccff;
+  border-color: #00ccff;
+}
+
+.source-x {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.source-price {
+  color: #ffcc00;
+  border-color: #ffcc00;
+}
+
+/* Category tag colors */
+.tag-policy { color: #ff9900; }
+.tag-macro { color: #9966ff; }
+.tag-market { color: #00ffcc; }
+.tag-tech { color: #ff66cc; }
+.tag-security { color: #ff3366; }
+.tag-funding { color: #66ff66; }
+.tag-adoption { color: #6699ff; }

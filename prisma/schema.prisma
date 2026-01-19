@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model SourceItem {
+  id             String   @id @default(cuid())
+  type           String   // news | kol | price
+  sourceName     String
+  url            String
+  title          String
+  contentSnippet String?
+  rawText        String?
+  publishedAt    DateTime
+  fetchedAt      DateTime @default(now())
+  rawJson        String?
+}
+
+model Cluster {
+  id               String   @id @default(cuid())
+  clusterType      String   // news | kol
+  canonicalTitle   String
+  labelKeywords    String   // JSON array
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model ClusterMember {
+  id        String @id @default(cuid())
+  clusterId String
+  itemId    String
+
+  @@unique([clusterId, itemId])
+}
+
+model Deck {
+  id        String   @id @default(cuid())
+  userId    String?
+  deckDate  String   // YYYY-MM-DD
+  createdAt DateTime @default(now())
+  cards     Card[]
+}
+
+model Card {
+  id             String   @id @default(cuid())
+  deckId         String
+  deck           Deck     @relation(fields: [deckId], references: [id])
+  cardType       String   // news | kol | price
+  bullBear       String   // bull | bear
+  confidence     Int      // 0-100
+  headline       String
+  sourceBadge    String
+  categoryTags   String   // JSON array
+  brief          String?
+  insight        String?
+  primaryLinks   String?  // JSON array
+  secondaryLinks String?  // JSON array
+  originalItemId String?
+  relatedItemIds String?  // JSON array
+  scoreBreakdown String?  // JSON object
+  clusterId      String?
+  createdAt      DateTime @default(now())
+}

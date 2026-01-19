@@ -15,8 +15,8 @@ const TypeIcon = ({ type }: { type: string }) => {
   switch (type) {
     case 'news':
       return (
-        <div className="w-6 h-6 flex items-center justify-center text-current opacity-80">
-          <svg viewBox="0 0 16 16" fill="currentColor" className="w-5 h-5">
+        <div className="w-12 h-12 flex items-center justify-center text-current opacity-90">
+          <svg viewBox="0 0 16 16" fill="currentColor" className="w-10 h-10">
             <rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1"/>
             <rect x="4" y="4" width="8" height="2" fill="currentColor"/>
             <rect x="4" y="7" width="8" height="1" fill="currentColor"/>
@@ -27,8 +27,8 @@ const TypeIcon = ({ type }: { type: string }) => {
       )
     case 'kol':
       return (
-        <div className="w-6 h-6 flex items-center justify-center text-current opacity-80">
-          <svg viewBox="0 0 16 16" fill="currentColor" className="w-5 h-5">
+        <div className="w-12 h-12 flex items-center justify-center text-current opacity-90">
+          <svg viewBox="0 0 16 16" fill="currentColor" className="w-10 h-10">
             <circle cx="8" cy="5" r="3" fill="none" stroke="currentColor" strokeWidth="1"/>
             <path d="M3 14 C3 10 13 10 13 14" fill="none" stroke="currentColor" strokeWidth="1"/>
             <rect x="10" y="2" width="4" height="3" fill="currentColor"/>
@@ -38,8 +38,8 @@ const TypeIcon = ({ type }: { type: string }) => {
       )
     case 'price':
       return (
-        <div className="w-6 h-6 flex items-center justify-center text-current opacity-80">
-          <svg viewBox="0 0 16 16" fill="currentColor" className="w-5 h-5">
+        <div className="w-12 h-12 flex items-center justify-center text-current opacity-90">
+          <svg viewBox="0 0 16 16" fill="currentColor" className="w-10 h-10">
             <polyline points="2,12 5,8 8,10 11,4 14,6" fill="none" stroke="currentColor" strokeWidth="1.5"/>
             <circle cx="14" cy="6" r="1.5" fill="currentColor"/>
           </svg>
@@ -97,7 +97,7 @@ export default function Card({ card, index, onClick, isRevealed }: CardProps) {
       <div 
         className={`
           w-[120px] h-[140px] md:w-[130px] md:h-[150px] lg:w-[140px] lg:h-[160px]
-          relative overflow-hidden
+          relative overflow-hidden rounded-lg
           ${isBull ? 'card-bull' : 'card-bear'}
           transition-all duration-200
           hover:shadow-lg
@@ -123,7 +123,7 @@ export default function Card({ card, index, onClick, isRevealed }: CardProps) {
         
         {/* Center: Type Icon */}
         <div className={`
-          absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+          absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%]
           ${isBull ? 'text-bull-green' : 'text-bear-red'}
         `}>
           <TypeIcon type={card.cardType} />
@@ -175,7 +175,7 @@ export function CardPlaceholder({ index }: { index: number }) {
         delay: index * 0.1 
       }}
     >
-      <div className="w-full h-full bg-bg-card border-2 border-terminal-green/30 flex items-center justify-center">
+      <div className="w-full h-full bg-bg-card border-2 border-terminal-green/30 rounded-lg flex items-center justify-center">
         <div className="text-terminal-green/50 font-pixel text-xs">?</div>
       </div>
     </motion.div>

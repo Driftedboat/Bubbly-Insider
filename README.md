@@ -46,10 +46,14 @@ npm install
 npx prisma db push
 ```
 
-4. (Optional) Add your Anthropic API key for AI-powered insights:
+4. (Optional) Add API keys for enhanced features:
 ```bash
-# Create .env.local file
-echo "ANTHROPIC_API_KEY=your_key_here" > .env.local
+# Create .env.local file with your API keys
+# For AI-powered insights:
+ANTHROPIC_API_KEY=your_anthropic_key
+
+# For X/Twitter KOL scraping (get at https://developer.twitter.com/):
+TWITTER_BEARER_TOKEN=your_twitter_bearer_token
 ```
 
 5. Run the development server:
@@ -129,6 +133,30 @@ Get current market data.
 ### GET /api/cards/[id]
 Get detailed card information.
 
+### POST /api/scrape
+Trigger scraping of news (RSS) and KOL posts (X API).
+
+```json
+{
+  "success": true,
+  "results": {
+    "news": { "scraped": 45, "ingested": 12, "errors": [] },
+    "kol": { "scraped": 0, "ingested": 0, "errors": ["TWITTER_BEARER_TOKEN not set"] }
+  }
+}
+```
+
+## Data Sources
+
+| Source | Type | API Key Required |
+|--------|------|------------------|
+| CoinDesk | News RSS | No |
+| The Block | News RSS | No |
+| Decrypt | News RSS | No |
+| Bloomberg | News (limited) | No |
+| X/Twitter | KOL Posts | Yes (`TWITTER_BEARER_TOKEN`) |
+| CoinGecko | Prices | No (free tier) |
+
 ## MVP Roadmap
 
 - [x] M0: UI scaffold with placeholder cards
@@ -137,7 +165,7 @@ Get detailed card information.
 - [x] M3: Shuffle animation
 - [x] M4: Claude integration
 - [x] M5: Polish + mobile responsive
-- [ ] M6: Real API integration (CoinGecko, X)
+- [x] M6: Real API integration (CoinGecko, RSS, X)
 - [ ] M7: User accounts + deck history
 
 ## Disclaimer

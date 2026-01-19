@@ -77,10 +77,75 @@ const getCategoryColor = (category: string) => {
 
 export default function Card({ card, index, onClick, isRevealed }: CardProps) {
   const isBull = card.bullBear === 'bull'
+  const isPriceCard = card.cardType === 'price'
   
+  // Special styling for price card
+  if (isPriceCard) {
+    return (
+      <motion.div
+        className="card-container cursor-pointer"
+        initial={{ rotateY: 180, opacity: 0 }}
+        animate={isRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 180, opacity: 0 }}
+        transition={{ 
+          duration: 0.5, 
+          delay: index * 0.08,
+          ease: 'easeOut'
+        }}
+        whileHover={{ 
+          scale: 1.03, 
+          transition: { duration: 0.2 } 
+        }}
+        onClick={onClick}
+      >
+        <div className={`
+          w-full h-[100px] md:h-[110px]
+          relative overflow-hidden rounded-lg
+          card-price
+          transition-all duration-200
+          hover:shadow-glow-amber
+        `}>
+          {/* Bitcoin Icon */}
+          <div className="absolute top-3 left-3">
+            <div className="w-10 h-10 rounded-full bg-terminal-amber/20 border-2 border-terminal-amber flex items-center justify-center">
+              <span className="font-pixel text-terminal-amber text-lg">₿</span>
+            </div>
+          </div>
+          
+          {/* Price Display */}
+          <div className="absolute top-3 right-3 text-right">
+            <div className="text-white font-terminal text-xl md:text-2xl">
+              {card.headline.match(/\$[\d,]+/)?.[0] || '$--'}
+            </div>
+            <div className={`text-sm font-terminal ${isBull ? 'text-bull-green' : 'text-bear-red'}`}>
+              {card.headline.match(/[+-]?\d+\.?\d*%/)?.[0] || '0%'}
+            </div>
+          </div>
+          
+          {/* Bottom: Label + Confidence */}
+          <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+            <div>
+              <span className="text-[10px] font-pixel text-terminal-amber/70 uppercase">BTC/USD</span>
+              <span className="text-[8px] font-terminal text-white/40 ml-2">24h</span>
+            </div>
+            <div className={`
+              text-sm font-pixel
+              ${isBull ? 'text-bull-green' : 'text-bear-red'}
+            `}>
+              {card.confidence}%
+            </div>
+          </div>
+          
+          {/* Trend Line Decoration */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-terminal-amber/50 via-terminal-amber to-terminal-amber/50" />
+        </div>
+      </motion.div>
+    )
+  }
+  
+  // Regular card
   return (
     <motion.div
-      className="card-container cursor-pointer flex-shrink-0"
+      className="card-container cursor-pointer"
       initial={{ rotateY: 180, opacity: 0 }}
       animate={isRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 180, opacity: 0 }}
       transition={{ 
@@ -96,7 +161,7 @@ export default function Card({ card, index, onClick, isRevealed }: CardProps) {
     >
       <div 
         className={`
-          w-[120px] h-[140px] md:w-[130px] md:h-[150px] lg:w-[140px] lg:h-[160px]
+          w-full h-[140px] md:h-[150px] lg:h-[160px]
           relative overflow-hidden rounded-lg
           ${isBull ? 'card-bull' : 'card-bear'}
           transition-all duration-200
@@ -166,7 +231,7 @@ export default function Card({ card, index, onClick, isRevealed }: CardProps) {
 export function CardPlaceholder({ index }: { index: number }) {
   return (
     <motion.div
-      className="w-[120px] h-[140px] md:w-[130px] md:h-[150px] lg:w-[140px] lg:h-[160px] flex-shrink-0"
+      className="w-full h-[140px] md:h-[150px] lg:h-[160px]"
       initial={{ opacity: 0.3 }}
       animate={{ opacity: [0.3, 0.6, 0.3] }}
       transition={{ 

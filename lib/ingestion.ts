@@ -1,4 +1,7 @@
 import { prisma } from './prisma'
+
+// Check if database is available
+const isDbAvailable = () => prisma !== null
 import { scrapeAllNews, scrapeAllX, fetchMarketPulse, ScrapedNewsItem, ScrapedKOLPost } from './scrapers'
 import { calculateConfidence, determineBullBear } from './confidence-scorer'
 import { Card, CategoryTag, SourceBadge } from '@/types'
@@ -7,6 +10,11 @@ import { Card, CategoryTag, SourceBadge } from '@/types'
  * Ingest news items into database
  */
 export async function ingestNews(items: ScrapedNewsItem[]): Promise<number> {
+  if (!isDbAvailable() || !prisma) {
+    console.warn('Database not available, skipping news ingestion')
+    return 0
+  }
+  
   let ingested = 0
   
   for (const item of items) {
@@ -43,6 +51,11 @@ export async function ingestNews(items: ScrapedNewsItem[]): Promise<number> {
  * Ingest KOL posts into database
  */
 export async function ingestKOLPosts(posts: ScrapedKOLPost[]): Promise<number> {
+  if (!isDbAvailable() || !prisma) {
+    console.warn('Database not available, skipping KOL ingestion')
+    return 0
+  }
+  
   let ingested = 0
   
   for (const post of posts) {
@@ -206,9 +219,31 @@ export function sourceItemToCard(item: {
  * Get recent items from database for deck generation
  */
 export async function getRecentItems(hoursBack: number = 24): Promise<{
-  news: Awaited<ReturnType<typeof prisma.sourceItem.findMany>>
-  kol: Awaited<ReturnType<typeof prisma.sourceItem.findMany>>
+  news: Array<{
+    id: string
+    type: string
+    sourceName: string
+    url: string
+    title: string
+    contentSnippet: string | null
+    publishedAt: Date
+    rawJson: string | null
+  }>
+  kol: Array<{
+    id: string
+    type: string
+    sourceName: string
+    url: string
+    title: string
+    contentSnippet: string | null
+    publishedAt: Date
+    rawJson: string | null
+  }>
 }> {
+  if (!isDbAvailable() || !prisma) {
+    return { news: [], kol: [] }
+  }
+  
   const cutoff = new Date(Date.now() - hoursBack * 60 * 60 * 1000)
   
   const [news, kol] = await Promise.all([
